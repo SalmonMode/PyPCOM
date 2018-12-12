@@ -36,6 +36,13 @@ class CssProperties():
         """``Color`` object with multiple ways to view color value."""
         return Color.from_string(self._parent.value_of_css_property("color"))
 
+    @property
+    def background_color(self):
+        """``Color`` object for ``backgorund-color`` CSS property of element."""
+        return Color.from_string(
+            self._parent.value_of_css_property("background-color"),
+        )
+
 
 class PageComponent(object):
     """The base class for all page components.
