@@ -6,6 +6,7 @@ from pypcom.__version__ import (
     __url__,
     __version__,
     __author__,
+    __copyright__,
     __author_email__,
     __license__,
 )
