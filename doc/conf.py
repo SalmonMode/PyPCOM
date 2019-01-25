@@ -1,9 +1,3 @@
-from pypcom import (
-    __title__,
-    __copyright__,
-    __author__,
-)
-
 # -*- coding: utf-8 -*-
 #
 # Configuration file for the Sphinx documentation builder.
@@ -18,9 +12,16 @@ from pypcom import (
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, '/Users/cnejame/dev/SalmonMode/PyPCOM/src/pypcom')
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
+
+
+from pypcom import (
+    __title__,
+    __copyright__,
+    __author__,
+)
 
 
 # -- Project information -----------------------------------------------------
