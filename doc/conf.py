@@ -48,6 +48,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
+    "sphinx.ext.intersphinx",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -190,4 +191,6 @@ epub_exclude_files = ['search.html']
 # -- Options for todo extension ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = Trueintersphinx_mapping = {"python": ("https://docs.python.org/3/", None)}
+intersphinx_mapping = {
+    "selenium": ("http://seleniumhq.github.io/selenium/docs/api/py/", None),
+}
