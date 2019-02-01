@@ -14,10 +14,12 @@ from pypcom.__version__ import (
 from pypcom.page import Page
 from pypcom.component import PageComponent
 PC = PageComponent
+from pypcom.state import State
 
 
 __all__ = [
     "Page",
     "PageComponent",
     "PC",
+    "State",
 ]

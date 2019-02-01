@@ -1,6 +1,9 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- State and ExpectedAttribute system (along with tests) to make bulk state checks on components easier, as well as custom ExpectedAttribute extensibility.
+- Pytest pytest_assertrepr_compare hook to make comparisons of PageComponent objects agaainst State objects have readable outputs in the failure report.
 
 ## [1.1.0] - 2018-12-12
 ### Added

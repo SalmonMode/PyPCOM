@@ -24,7 +24,7 @@ setup(
     author_email=about["__author_email__"],
     package_dir={"": "src"},
     license=about["__license__"],
-
+    entry_points={"pytest11": ["pypcom_state_repr = pypcom.pytest_plugin"]},
     classifiers=[
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Testing",
