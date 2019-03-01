@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Subpackages are now discovered by setuptools
 
 ## [1.2.0] - 2019-01-31
 ### Added

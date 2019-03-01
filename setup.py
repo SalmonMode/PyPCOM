@@ -45,7 +45,7 @@ setup(
         "testing test-automation functional-testing testing-tools test tests "
         "development organization"
     ),
-    packages=["pypcom"],
+    packages=["pypcom", "pypcom.state", "pypcom.common"],
     install_requires=[
         "selenium",
     ],
