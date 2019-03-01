@@ -1,7 +1,7 @@
 __title__ = "PyPCOM"
 __description__ = "Python Page Component Object Model for Selenium"
 __url__ = "https://github.com/SalmonMode/PyPCOM"
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 __author__ = "Chris NeJame"
 __copyright__ = "2019, Chris NeJame"
 __author_email__ = "Chris.T.NeJame@gmail.com"

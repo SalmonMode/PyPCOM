@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.2.1] - 2019-02-28
 ### Fixed
 - Subpackages are now discovered by setuptools
 
@@ -17,6 +19,7 @@
 ### Added
 - PyPCOM
 
-[Unreleased]: https://github.com/SalmonMode/PyPCOM/compare/1.2.0...HEAD
+[Unreleased]: https://github.com/SalmonMode/PyPCOM/compare/1.2.1...HEAD
+[1.2.1]: https://github.com/SalmonMode/PyPCOM/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/SalmonMode/PyPCOM/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/SalmonMode/PyPCOM/compare/1.0.0...1.1.0
