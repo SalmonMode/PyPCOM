@@ -106,6 +106,7 @@ class PageComponent(object):
     _find_from_parent = False
     _iframe_ancestor = False
     _is_iframe = False
+    _expected_conditions = None
 
     css = CssProperties()
 
@@ -234,25 +235,70 @@ class PageComponent(object):
             )
         return self._reference_node.find_element(*self._locator)
 
-    def wait_until(self, condition, timeout=10):
+    def _get_wait_condition_callable(self, condition, **kwargs):
+        """Given a string, find the callable associated with it.
+
+        This first looks at any defined callables provided in the
+        ``_expected_conditions`` attribute of the component. Failing that, it will defer
+        to the ``expected_conditions`` module.
+
+        It searches based on the string provided. In the case that it's searching in the
+        ``_expected_conditions`` attribute of the component, it treats the attribute
+        like a dictionary, and attempts to find any key that is equal to the provided
+        string. For the ``expected_conditions`` module, it seaches for any object in
+        that namespace that matches the provided string.
+
+        Once the callable is located, it must be prepared, as it's not yet the callable
+        that is passed to the wait. To prepare it,it must be called, and the component
+        will be passed as an argument, along with any additional keyword arguments
+        (other than ``timeout``) that were passed to ``wait_until``/``wait_until_not``.
+        Whatever object is returned by this, is the object that will be returned by this
+        method. This allows for more flexible callable generation and logic by providing
+        an opportunity to provide other information to include in the actual callable's
+        closure.
+        """
+        condition_callable_precursor = None
+        if isinstance(condition, str):
+            if self._expected_conditions is not None:
+                condition_callable_precursor = self._expected_conditions.get(
+                    condition,
+                    None,
+                )
+            if condition_callable_precursor is None:
+                condition_callable_precursor = getattr(
+                    expected_conditions,
+                    condition,
+                    None,
+                )
+
+            if condition_callable_precursor is None:
+                raise KeyError(
+                    "Condition '{}' is not supported".format(condition),
+                )
+        else:
+            condition_callable_precursor = condition
+
+        return condition_callable_precursor(self, **kwargs)
+
+    def wait_until(self, condition, timeout=10, **kwargs):
         """Wait for up to the allotted time until the condition is met.
 
         Args:
             condition (str): The condition to be met.
             timout (int): The maximum number of seconds to wait before failing.
         """
-        self._wait(True, condition, timeout)
+        return self._wait(True, condition, timeout, **kwargs)
 
-    def wait_until_not(self, condition, timeout=10):
+    def wait_until_not(self, condition, timeout=10, **kwargs):
         """Wait for up to the allotted time until the condition is not met.
 
         Args:
             condition (str): The condition to not be met.
             timout (int): The maximum number of seconds to wait before failing.
         """
-        self._wait(False, condition, timeout)
+        return self._wait(False, condition, timeout, **kwargs)
 
-    def _wait(self, wait_bool, condition, timeout=10):
+    def _wait(self, wait_bool, condition, timeout=10, **kwargs):
         """Logic for waiting.
 
         Lookups for expected conditions are either explicitely
@@ -262,17 +308,7 @@ class PageComponent(object):
             condition (str): The condition to be met/not met.
             timout (int): The maximum number of seconds to wait before failing.
         """
-        if isinstance(condition, str):
-            condition_callable = getattr(
-                expected_conditions,
-                condition.lower(),
-                None,
-            )
-
-            if condition_callable is None:
-                raise KeyError(
-                    "Condition '{}' is not supported".format(condition),
-                )
+        condition_callable = self._get_wait_condition_callable(condition, **kwargs)
 
         wait = WebDriverWait(
             driver=self._reference_node,
@@ -281,8 +317,8 @@ class PageComponent(object):
         )
         until_method = wait.until if wait_bool else wait.until_not
         with self.possible_iframe_context():
-            until_method(
-                condition_callable(self._locator),
+            return until_method(
+                condition_callable,
             )
 
     def is_present(self):

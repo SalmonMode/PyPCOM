@@ -120,6 +120,47 @@ Here's a quick example of its usage::
 
     page.component.wait_until("visible", timeout=5)
 
+It accepts strings that correspond to the normal expected conditions you've seen. But
+you can also reference expected conditions you've defined yourself and attached to the
+:py:class:`PageComponent` in its `_expected_condition` attribute. Here's an example of
+how it can be set up::
+
+    def custom_visible_condition(component):
+        def callable(driver):
+            return component.is_displayed()
+        return callable
+
+    class MyComponent(PC):
+        _locator = (...)
+        _expected_conditions = {
+            "custom_visible": custom_visible_condition,
+        }
+
+and here's how you'd use it::
+
+    page.my_component.wait_until("custom_visible")
+
+You can also pass in the callable directly, like this::
+
+    page.my_component.wait_until(custom_visible_condition)
+
+If you need to, you can provide additional keyword arguments for more flexible logic. Of
+course, you'll have to make sure you can handle it properly within the callable. For
+example, if you have some more advanced component structures and need to perform a query
+that goes beyond normal selenium logic, you could implement a `query` method (with
+whatever name you want, of course) and provide the necessary query details at the time
+the wait is executed. This might be how your callable looks::
+
+    def custom_query_condition(component, **query_details):
+        def callable(driver):
+            return component.query(**query_details)
+        return callable
+
+Then you could add it to the `_expected_conditions` dict attribute of that component,
+maybe as "complex_component_present", and invoke it like this::
+
+    page.my_component.wait_until("complex_component_present", **query_details)
+
 Sub-Components and `_find_from_parent`
 --------------------------------------
 
