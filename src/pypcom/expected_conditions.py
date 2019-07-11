@@ -8,19 +8,14 @@ here.
 
 from selenium.webdriver.support import expected_conditions as EC
 
-visible = EC.visibility_of_element_located
-present = EC.presence_of_element_located
-clickable = EC.element_to_be_clickable
+
+def visible(component, **kwargs):
+    return EC.visibility_of_element_located(component._locator)
 
 
-class animating(object):
-    """An expectation for checking that velicity animation is in progress."""
+def present(component, **kwargs):
+    return EC.presence_of_element_located(component._locator)
 
-    def __init__(self, locator):
-        self.locator = locator
 
-    def __call__(self, driver):
-        """Check that jQuery is present and not active."""
-        el = driver.find_element(*self.locator)
-        classes = el.get_attribute("class").split(" ")
-        return "velocity-animating" in classes
+def clickable(component, **kwargs):
+    return EC.element_to_be_clickable(component._locator)
