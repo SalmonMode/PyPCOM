@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.3.0] - 2019-07-11
 ### Added
 - Custom expected conditions built into components
 - Passing extra keyword arguments to a wait call
