@@ -25,6 +25,7 @@ below.
    writing_tests
    state
    expected_attribute
+   advanced
 
 .. _Selenium: http://seleniumhq.org/
 .. _pytest: https://docs.pytest.org/

@@ -1,0 +1,47 @@
+<form id="add-car-form" onsubmit="addCar()">
+    <select name="make" onchange="updateModels()" required>
+        <option value="" selected disabled hidden>--Choose a make--</option>
+        <option value="chevrolet">Chevrolet</option>
+        <option value="toyota">Toyota</option>
+        <option value="ford">Ford</option>
+    </select>
+    <select name="model" required disabled>
+        <option value="" selected disabled hidden>--Choose a model--</option>
+    </select>
+    <input name="year" required placeholder="year">
+    <select name="color" required>
+        <option value="" selected disabled hidden>--Choose a color--</option>
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="blue">Blue</option>
+    </select>
+    <button id="add-button" type="submit">Add car</button>
+</form>
+<button id="delete-button" onclick="deleteSelectedCars()">Delete</button>
+<table class="carTable">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Color</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="checkbox" name="car" value="1"></td>
+            <td>Chevrolet</td>
+            <td>Malibu</td>
+            <td>1997</td>
+            <td>Red</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="car" value="2"></td>
+            <td>Toyota</td>
+            <td>Corola</td>
+            <td>2014</td>
+            <td>Green</td>
+        </tr>
+    </tbody>
+</table>

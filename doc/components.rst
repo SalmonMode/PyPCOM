@@ -1,4 +1,4 @@
-..  _components:
+.. _components:
 
 Components
 ==========
@@ -6,8 +6,8 @@ Components
 These are the heart of soul of this framework.
 
 At a very basic level, components are just classes that have a locator for a
-specific element, and get used as descriptors in pages or other components. When
-referenced, they can be treated as though you are referencing the
+specific element, and get used as descriptors in pages or other components.
+When referenced, they can be treated as though you are referencing the
 :py:class:`~selenium.webdriver.remote.webelement.WebElement` they're associated
 with. That means you can reference their `.text` property or `.is_displayed()`
 on them. You can even do this for a component that has sub-components of its
@@ -30,8 +30,8 @@ would look something like this::
 Adding Sub-Components
 `````````````````````
 
-If you want to add sub-components to it, it's identical to adding a component to
-the page class. You just need to add it like a decorator::
+If you want to add sub-components to it, it's identical to adding a component
+to the page class. You just need to add it like a decorator::
 
     class MySubComponent(PC):
         _locator = (By.ID, "my-other-id")
@@ -102,28 +102,27 @@ you basically duplicate it, and only modify the part where it invokes
 :py:func:`~selenium.webdriver.remote.webelement.WebElement.send_keys` to make
 sure it continues working as it needs to.
 
-This approach will likely change in the future to provide a more convenient hook
-to override, but any additional hook will not break a custom `__set__`
+This approach will likely change in the future to provide a more convenient
+hook to override, but any additional hook will not break a custom `__set__`
 implementation if it copies the current one.
 
 Waiting
 -------
 
-Waiting is simple, too. You can either call :py:func:`PageComponent.wait_until()`
-or :py:func:`PageComponent.wait_until_not()` on the component you want to
-perform the wait on, and pass it a string for the condition you want to wait
-for. The three available conditions are `"present"`, `"visible"`, and
-`"clickable"`. More will be added soon, along with a system for passing custom
-condition callables.
+Waiting is simple, too. You can either call
+:py:func:`PageComponent.wait_until()` or
+:py:func:`PageComponent.wait_until_not()` on the component you want to perform
+the wait on, and pass it a string for the condition you want to wait for. The
+three available conditions are `"present"`, `"visible"`, and `"clickable"`.
 
 Here's a quick example of its usage::
 
     page.component.wait_until("visible", timeout=5)
 
-It accepts strings that correspond to the normal expected conditions you've seen. But
-you can also reference expected conditions you've defined yourself and attached to the
-:py:class:`PageComponent` in its `_expected_condition` attribute. Here's an example of
-how it can be set up::
+It accepts strings that correspond to the normal expected conditions you've
+seen. But you can also reference expected conditions you've defined yourself
+and attached to the :py:class:`PageComponent` in its `_expected_condition`
+attribute. Here's an example of how it can be set up::
 
     def custom_visible_condition(component):
         def callable(driver):
@@ -144,45 +143,47 @@ You can also pass in the callable directly, like this::
 
     page.my_component.wait_until(custom_visible_condition)
 
-If you need to, you can provide additional keyword arguments for more flexible logic. Of
-course, you'll have to make sure you can handle it properly within the callable. For
-example, if you have some more advanced component structures and need to perform a query
-that goes beyond normal selenium logic, you could implement a `query` method (with
-whatever name you want, of course) and provide the necessary query details at the time
-the wait is executed. This might be how your callable looks::
+If you need to, you can provide additional keyword arguments for more flexible
+logic. Of course, you'll have to make sure you can handle it properly within
+the callable. For example, if you have some more advanced component structures
+and need to perform a query that goes beyond normal selenium logic, you could
+implement a `query` method (with whatever name you want, of course) and provide
+the necessary query details at the time the wait is executed. This might be
+how your callable looks::
 
     def custom_query_condition(component, **query_details):
         def callable(driver):
             return component.query(**query_details)
         return callable
 
-Then you could add it to the `_expected_conditions` dict attribute of that component,
-maybe as "complex_component_present", and invoke it like this::
+Then you could add it to the `_expected_conditions` dict attribute of that
+component, maybe as "complex_component_present", and invoke it like this::
 
     page.my_component.wait_until("complex_component_present", **query_details)
 
 Sub-Components and `_find_from_parent`
 --------------------------------------
 
-Often, you will find yourself with long and convoluted selectors, simply because
-the element you want to find is in some heavily nested node, and you have to
-repeat parts of your selector in many sub-components.
+Often, you will find yourself with long and convoluted selectors, simply
+because the element you want to find is in some heavily nested node, and you
+have to repeat parts of your selector in many sub-components.
 
 PyPCOM offers a solution to this that lets you simply search for a
 sub-component's associated
 :py:class:`~selenium.webdriver.remote.webelement.WebElement` within its parent
 component's :py:class:`~selenium.webdriver.remote.webelement.WebElement` by
-calling :py:func:`~selenium.webdriver.remote.webelement.WebElement.find_element`
-on that instead of the driver. This allows you to give the sub-component a
-locator that is relative to its parent component's
+calling
+:py:func:`~selenium.webdriver.remote.webelement.WebElement.find_element` on
+that instead of the driver. This allows you to give the sub-component a locator
+that is relative to its parent component's
 :py:class:`~selenium.webdriver.remote.webelement.WebElement`, so you don't have
 to keep repeating the common parts of the locator, and can instead create a
-simpler, cleaner, and more appropriate locator than you might not have been able
-to otherwise.
+simpler, cleaner, and more appropriate locator than you might not have been
+able to otherwise.
 
 To use it, all you have to do is set `_find_from_parent` to `True` in the class
-definition of the sub-component. The parent components don't need to be aware of
-this, so long as they have a `_locator` of their own.
+definition of the sub-component. The parent components don't need to be aware
+of this, so long as they have a `_locator` of their own.
 
 Simple Example
 ``````````````
@@ -252,76 +253,8 @@ your locator logic::
         _locator = (By.CSS_SELECTOR, "div.some-area")
         some_content_section = SomeContentSection()
 
-Advanced Example
-````````````````
-
-This also allows for making complex, generic component structures that can be
-re-used in several places. Let's say you have a common structure for your form
-control elements in all your forms where each field has an `<input>` element and
-a `<label>` bundled inside its own `<div>`. It would look something like this:
-
-.. code-block:: html
-
-    <div class='form-field'>
-        <label for='first-name'>First Name:</label>
-        <input id='first-name' name='first-name' />
-    </div>
-    <div class='form-field'>
-        <label for='last-name'>Last Name:</label>
-        <input id='last-name' name='last-name' />
-    </div>
-
-This would be tedious to have to define a label and input component for every
-field in your site. But you could create a generic structure like this that you
-could reuse::
-
-    class Label(PC):
-        _find_from_parent = True
-        _locator = (By.TAG_NAME, "label")
-
-    class Input(PC):
-        _find_from_parent = True
-        _locator = (By.TAG_NAME, "input")
-
-    class FormField(PC):
-        label = Label()
-        input = Input()
-
-        def __set__(self, instance, value):
-            self._parent = instance
-            self.driver = self._parent.driver
-            self.input = value
-
-With that, you could just inherit from `FormField` to make a new class for
-each field, and it would even let you assign a value to the input by setting the
-field component itself (i.e. `page.form.my_field = "something"`). You could even
-get a little fancy with the locator to make sure you always find the right
-field `<div>`::
-
-    class FirstNameField(FormField):
-        _locator = (
-            By.XPATH,
-            (
-                "//div[contains(concat(' ', @class, ' '), ' form-field ')]"
-                "[input[@id='first-name']]"
-            ),
-        )
-
-    class LastNameField(FormField):
-        _locator = (
-            By.XPATH,
-            (
-                "//div[contains(concat(' ', @class, ' '), ' form-field ')]"
-                "[input[@id='last-name']]"
-            ),
-        )
-
-That XPATH would locate a `<div>`` that both has a single class of `form-field`,
-and also contains an `<input>` with the desired `id`. It won't find the
-`<input>` itself; it just finds the right `<div>` that contains it. But that's
-intended. This way we know we found the element that contains only that
-`<input>` and its `<label>`, and we can let the `FormField` class hold all the
-common logic.
+For something a little more complex, check out :ref:`generic`, or the other
+examples in :ref:`advanced`.
 
 Deferring Attribute Lookups (Or "How does it do that?")
 -------------------------------------------------------
@@ -329,9 +262,10 @@ Deferring Attribute Lookups (Or "How does it do that?")
 Why Descriptors?
 ````````````````
 
-PyPCOM works using descriptors for the components, but the only things it really
-uses that for are making sure a reference to the `driver` and each component's
-parent component/page is accessible, and to allow for convenient value setting.
+PyPCOM works using descriptors for the components, but the only things it
+really uses that for are making sure a reference to the `driver` and each
+component's parent component/page is accessible, and to allow for convenient
+value setting.
 
 PyPCOM needs to make sure that, before it does anything, as a component is
 referenced (either through `__get__` or `__set__`), it grabs the reference to
@@ -342,10 +276,10 @@ on. For example, if you were to reference something like::
     page.some_component.another_component = "some text"
 
 `some_component` would be referenced through `__get__` and get a reference to
-the driver from `page`. It would also store a reference to `page` as its parent.
-`another_component` would then be referenced through `__set__` and get a
-reference to the driver from `some_component`. It would also store a reference
-to `some_component` as its parent.
+the driver from `page`. It would also store a reference to `page` as its
+parent. `another_component` would then be referenced through `__set__` and get
+a reference to the driver from `some_component`. It would also store a
+reference to `some_component` as its parent.
 
 Descriptors also means classes will be used, so you can define custom behavior,
 inherit behavior from other components, and re-use components as much as you
@@ -355,9 +289,9 @@ How does it support selenium methods/attributes like it does?
 `````````````````````````````````````````````````````````````
 
 PyPCOM relies on the default attribute lookup behavior of objects in Python. If
-a class instance, or the class itself does not have a certain attribute defined,
-then Python calls the object's `__getattr__` method (assuming it has one
-defined).
+a class instance, or the class itself does not have a certain attribute
+defined, then Python calls the object's `__getattr__` method (assuming it has
+one defined).
 
 For components, when you reference an attribute of them, if the component
 instance has no such attribute, and neither does its class, then the component
