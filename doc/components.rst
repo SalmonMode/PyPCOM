@@ -200,8 +200,8 @@ Let's say you have the following collection of elements somewhere in your page:
         </div>
     </div>
 
-To reliably find these elements, you might havee to use a involving references
-to both parent elements. For example::
+To reliably find these elements, you might have to use a very lengthy locator
+involving references to both parent elements. For example::
 
     class MyImage(PC):
         _locator = (By.CSS_SELECTOR, "div.some-area div.content-section img")
