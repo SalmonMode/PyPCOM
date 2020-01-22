@@ -83,10 +83,10 @@ with the normal :py:class:`~selenium.webdriver.remote.webelement.WebElement` or
 :py:class:`PageComponent` methods/attributes.
 
 
-Enterring Text
+Entering Text
 --------------
 
-Enterring text is easy. For a given component, the locator just needs to point
+Entering text is easy. For a given component, the locator just needs to point
 to the actual `input` element, and then you can invoke
 :py:func:`~selenium.webdriver.remote.webelement.WebElement.send_keys` through
 the `=` operator like this::
