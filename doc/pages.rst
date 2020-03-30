@@ -26,6 +26,8 @@ but here's a quick example for a login page:
 
 .. code-block:: python
 
+    from pypcom import Page
+
     class LoginPage(Page):
 
         login_form = LoginForm()
