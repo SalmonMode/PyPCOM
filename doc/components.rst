@@ -24,6 +24,8 @@ that inherits from :py:class:`PageComponent` (or :py:class:`PC` for something
 shorter), and give it a locator that can be passed to `.find_element()`. It
 would look something like this::
 
+    from PyPCOM import PC
+
     class MyComponent(PC):
         _locator = (By.ID, "my-id")
 
