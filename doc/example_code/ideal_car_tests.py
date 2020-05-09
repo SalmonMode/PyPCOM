@@ -25,7 +25,7 @@ class TestCarIsRemoved:
         page.add_car(car)
 
     @pytest.fixture(scope="class", autouse=True)
-    def remove_car(self, car, page):
+    def remove_car(self, car, page, add_car):
         page.remove_car(car)
 
     def test_car_is_not_in_table(self, page, car):
