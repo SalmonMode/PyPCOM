@@ -1,2 +1,2 @@
 # PyPCOM
-Python page component object model for Selenium
+Python page component object framework for Selenium
